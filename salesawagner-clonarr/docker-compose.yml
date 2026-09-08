@@ -2,13 +2,13 @@ services:
   app_proxy:
     environment:
       APP_HOST: clonarr
-      APP_PORT: 7777
+      APP_PORT: 6060
       PROXY_AUTH_WHITELIST: /api/*
     container_name: clonarr_app_proxy_1
     restart: unless-stopped
 
   clonarr:
-    image: ghcr.io/prophetse7en/clonarr
+    image: ghcr.io/prophetse7en/clonarr:latest
     container_name: clonarr
     environment:
       - PUID=1000
