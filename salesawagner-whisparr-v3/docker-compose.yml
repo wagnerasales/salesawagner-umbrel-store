@@ -20,9 +20,6 @@ services:
       - WHISPARR__APP__INSTANCENAME=Whisparr v3
     volumes:
       - ${APP_DATA_DIR}/data/config:/config
-      - /mnt/downloads:/downloads
-      - /mnt/media/media/xxx/movies:/media/movies
-      - /mnt/media/media/xxx/scenes:/media/scenes
     restart: unless-stopped
 
   mac:
