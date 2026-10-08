@@ -20,6 +20,39 @@ services:
       - ${APP_DATA_DIR}/data/config:/config
     restart: unless-stopped
 
+  stash_plex_proxy:
+    image: nginx:alpine
+    container_name: stash_plex_proxy
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "19999:19999"
+    command:
+      - /bin/sh
+      - -c
+      - |
+        cat > /etc/nginx/nginx.conf <<'EOF'
+        events {}
+
+        http {
+          server {
+            listen 19999;
+
+            location / {
+              proxy_pass http://stash:9999;
+              proxy_http_version 1.1;
+              proxy_set_header Host $$host;
+              proxy_set_header X-Real-IP $$remote_addr;
+              proxy_set_header X-Forwarded-For $$proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $$scheme;
+            }
+          }
+        }
+        EOF
+
+        nginx -g 'daemon off;'
+
   mac:
     image: getumbrel/media-app-configurator:v1.3.2@sha256:9ff34bda1e36ffe5a028d2463f4aaa9f20b93e8bec4392da077137c56bea3c34
     user: '1000:1000'
